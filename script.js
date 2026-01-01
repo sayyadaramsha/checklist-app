@@ -13,12 +13,19 @@ function showTab(id) {
 
 function openNewChecklist() {
   showTab("checklist");
-  document.getElementById("checklistDate").value = "";
-  document.getElementById("checklistLabel").value = "";
-  document.getElementById("items").innerHTML = "";
-  updateSummary();
-  currentDate = null;
+
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("checklistDate").value = today;
+
+  if (!checklists[today]) {
+    checklists[today] = { label: "", items: [] };
+  }
+
+  currentDate = today;
+  document.getElementById("checklistLabel").value = checklists[today].label;
+  renderItems();
 }
+
 
 document.getElementById("checklistDate").addEventListener("change", e => {
   currentDate = e.target.value;
@@ -164,3 +171,4 @@ function renderHistory() {
     history.appendChild(div);
   });
 }
+
