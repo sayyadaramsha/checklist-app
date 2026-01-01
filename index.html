@@ -3,18 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checklist App</title>
-
+  <title>My Checklist</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- TABS -->
+<div class="tabs">
+  <button onclick="showTab('home')">Home</button>
+  <button onclick="showTab('history')">History</button>
+</div>
+
+<!-- HOME -->
+<section id="home" class="tab active">
   <h1>My Checklist</h1>
+  <button class="primary" onclick="openNewChecklist()">➕ New Checklist Creation</button>
+</section>
 
-  <button id="addBtn">➕ ADD</button>
+<!-- HISTORY -->
+<section id="history" class="tab">
+  <h2>History</h2>
+  <div id="historyList">No checklists yet.</div>
+</section>
 
-  <div id="list"></div>
+<!-- CHECKLIST PAGE -->
+<section id="checklist" class="tab">
+  <button class="back" onclick="showTab('home')">← Back</button>
 
-  <script src="script.js"></script>
+  <div class="header">
+    <input type="date" id="checklistDate">
+    <input type="text" id="checklistLabel" placeholder="Checklist label">
+  </div>
+
+  <button class="primary" onclick="addItem()">➕ ADD</button>
+
+  <div id="items"></div>
+</section>
+
+<script src="script.js"></script>
 </body>
 </html>
