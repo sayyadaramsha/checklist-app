@@ -16,6 +16,7 @@ function openNewChecklist() {
   document.getElementById("checklistDate").value = "";
   document.getElementById("checklistLabel").value = "";
   document.getElementById("items").innerHTML = "";
+  updateSummary();
   currentDate = null;
 }
 
@@ -93,6 +94,33 @@ function renderItems() {
     div.append(text, "✅", right, "❌", wrong);
     container.appendChild(div);
   });
+
+  updateSummary();
+}
+
+function updateSummary() {
+  if (!currentDate || !checklists[currentDate]) {
+    document.getElementById("rightPercent").innerText = "0%";
+    document.getElementById("wrongPercent").innerText = "0%";
+    return;
+  }
+
+  const items = checklists[currentDate].items;
+  if (items.length === 0) {
+    document.getElementById("rightPercent").innerText = "0%";
+    document.getElementById("wrongPercent").innerText = "0%";
+    return;
+  }
+
+  const rightCount = items.filter(i => i.right).length;
+  const wrongCount = items.filter(i => i.wrong).length;
+  const total = items.length;
+
+  document.getElementById("rightPercent").innerText =
+    Math.round((rightCount / total) * 100) + "%";
+
+  document.getElementById("wrongPercent").innerText =
+    Math.round((wrongCount / total) * 100) + "%";
 }
 
 function renderHistory() {
@@ -106,8 +134,33 @@ function renderHistory() {
   }
 
   dates.forEach(date => {
+    const items = checklists[date].items || [];
+    const right = items.filter(i => i.right).length;
+    const wrong = items.filter(i => i.wrong).length;
+    const total = items.length || 1;
+
     const div = document.createElement("div");
-    div.innerText = `${date} — ${checklists[date].label || "No label"}`;
+    div.style.padding = "8px";
+    div.style.background = "#fff";
+    div.style.borderRadius = "8px";
+    div.style.marginBottom = "8px";
+
+    div.innerHTML = `
+      <strong>${date}</strong><br>
+      ${checklists[date].label || "No label"}<br>
+      ✅ ${Math.round((right / total) * 100)}% |
+      ❌ ${Math.round((wrong / total) * 100)}%
+    `;
+
+    div.onclick = () => {
+      showTab("checklist");
+      currentDate = date;
+      document.getElementById("checklistDate").value = date;
+      document.getElementById("checklistLabel").value =
+        checklists[date].label;
+      renderItems();
+    };
+
     history.appendChild(div);
   });
 }
