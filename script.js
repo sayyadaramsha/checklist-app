@@ -1,74 +1,70 @@
-const addBtn = document.getElementById("addBtn");
-const list = document.getElementById("list");
-
-let data = JSON.parse(localStorage.getItem("items")) || [];
-
-function save() {
-  localStorage.setItem("items", JSON.stringify(data));
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f5f5;
+  padding: 15px;
 }
 
-function render() {
-  list.innerHTML = "";
-
-  data.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className = "item";
-
-    const date = document.createElement("input");
-    date.type = "date";
-    date.value = item.date;
-    date.onchange = () => {
-      data[index].date = date.value;
-      save();
-    };
-
-    const text = document.createElement("input");
-    text.type = "text";
-    text.placeholder = "Enter text...";
-    text.value = item.text;
-    text.oninput = () => {
-      data[index].text = text.value;
-      save();
-    };
-
-    const right = document.createElement("input");
-    right.type = "checkbox";
-    right.checked = item.right;
-    right.onclick = () => {
-      data[index].right = true;
-      data[index].wrong = false;
-      save();
-      render();
-    };
-
-    const wrong = document.createElement("input");
-    wrong.type = "checkbox";
-    wrong.checked = item.wrong;
-    wrong.onclick = () => {
-      data[index].wrong = true;
-      data[index].right = false;
-      save();
-      render();
-    };
-
-    const checks = document.createElement("div");
-    checks.className = "checks";
-    checks.append("✅", right, "❌", wrong);
-
-    div.append(date, text, checks);
-    list.append(div);
-  });
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-addBtn.onclick = () => {
-  data.push({
-    date: "",
-    text: "",
-    right: false,
-    wrong: false
-  });
-  save();
-  render();
-};
+.tabs button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #ddd;
+}
 
-render();
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.primary {
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.back {
+  background: none;
+  border: none;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.header input {
+  padding: 8px;
+  flex: 1;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.item input[type="text"] {
+  flex: 1;
+  padding: 6px;
+}
+
